@@ -12,4 +12,14 @@ jobs:
       with:
         python-version: '3.7'
     - name: download-arin
-      run: python ./ftp-s3-sync/src/update_ftp_file.py --source "ftp://ftp.arin.net/pub/rr/arin.db" --name "arin.db" --target $(pwd)/dist
+      run: python ./ftp-s3-sync/src/update_ftp_file.py --source "ftp://ftp.arin.net/pub/rr/arin.db" --name "arin.db" --target dist
+    - name: push
+      uses: github-actions-x/commit@v2.3
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        push-branch: 'master'
+        commit-message: 'publish arin db'
+        force-add: 'true'
+        files: dist
+        name: Jaecktec Pipeline
+        email: my.github@email.com
