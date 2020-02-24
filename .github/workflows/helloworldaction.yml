@@ -4,14 +4,16 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+    - name: Install dependencies
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        python -m pip install --upgrade pip
+        pip install -r ftp-s3-sync/requirements.txt
+    - name: download-arin
+      run: python ./ftp-s3-sync/src/update_ftp_file.py --source "ftp://ftp.arin.net/pub/rr/arin.db" --name "arin.db" --target $(pwd)/dist
