@@ -29,7 +29,7 @@ jobs:
     - name: download ripe-v6.gz
       run: python ./ftp-s3-sync/src/update_ftp_file.py --source "ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inet6num.gz" --name "ripe-v6.gz" --target dist
     - name: push
-      uses: github-actions-x/commit@v2.3
+      uses: jaecktec/commit@v2.4.1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'master'
