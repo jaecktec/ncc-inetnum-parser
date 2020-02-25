@@ -1,24 +1,48 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron:  '0 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          - source: ftp://ftp.arin.net/pub/rr/arin.db
+            name: arin.db
+          - source: ftp://ftp.apnic.net/pub/apnic/whois/apnic.db.inet6num.gz
+            name: apnic-v6.gz
+          - source: ftp://ftp.apnic.net/pub/apnic/whois/apnic.db.inetnum.gz
+            name: apnic-v4.gz
+          - source: ftp://ftp.afrinic.net/pub/dbase/afrinic.db.gz
+            name: afrinic.gz
+#          - source: ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-extended-latest
+#            name: larnic.db
+          - source: ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz
+            name: ripe-v4.gz
+          - source: ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inet6num.gz
+            name: ripe-v6.gz
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.7
       uses: actions/setup-python@v1
       with:
         python-version: '3.7'
-    - name: download-arin
-      run: python ./ftp-s3-sync/src/update_ftp_file.py --source "ftp://ftp.arin.net/pub/rr/arin.db" --name "arin.db" --target dist
+    - name: download ${{ matrix.config }}
+      run: python ./ftp-s3-sync/src/update_ftp_file.py --source "${{ matrix.config.source }}" --name "${{ matrix.config.name }}" --target dist
+      with:
+        version: ${{ matrix.config }}
     - name: push
       uses: github-actions-x/commit@v2.3
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'master'
-        commit-message: 'publish arin db'
+        commit-message: 'publish updated ncc files'
         force-add: 'true'
         files: dist
         name: Jaecktec Pipeline
