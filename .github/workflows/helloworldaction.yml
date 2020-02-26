@@ -44,7 +44,6 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'master'
         commit-message: 'publish updated ncc files'
-        force-add: 'true'
         files: dist
         name: Jaecktec Pipeline
         email: my.github@email.com
