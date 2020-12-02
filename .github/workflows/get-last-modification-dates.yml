@@ -1,6 +1,10 @@
 name: get last modification date
 
 on:
+  workflow_dispatch:
+    inputs:  
+      tags:
+        description: 'Test scenario tags'  
   schedule:
     - cron:  '0/5 * * * *'
 
