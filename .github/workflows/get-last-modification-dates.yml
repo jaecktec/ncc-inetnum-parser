@@ -12,7 +12,7 @@ jobs:
   download:
     runs-on: ubuntu-latest
     steps:
-    - uses: github-actions-x/commit@v2.4.1
+    - uses: actions-x/commit@v2
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
       with:
@@ -34,9 +34,9 @@ jobs:
     - name: push
       uses: github-actions-x/commit@v2.4.1
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        push-branch: 'master'
-        commit-message: '👷‍ publish updated ncc files'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: 'master'
+        message: '👷‍ publish updated ncc timestamps'
         files: dist
         name: Get last modification date action
         email: jaecktec@users.noreply.github.com
