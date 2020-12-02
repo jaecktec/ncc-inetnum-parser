@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from argparse import ArgumentParser
 
 
-def update_file(ftp_uri, soruce_name, target_folder):
+def update_ftp_file(ftp_uri, soruce_name, target_folder):
     o = urlparse(ftp_uri)
     ftp = FTP()
     if o.port is None:
@@ -16,7 +16,7 @@ def update_file(ftp_uri, soruce_name, target_folder):
     ftp.login()
     path_split = o.path.split('/')
     for path_elem in path_split[:(len(path_split) - 1)]:
-        if path_elem is '':
+        if path_elem == '':
             continue
         ftp.cwd(path_elem)
         pass
@@ -28,8 +28,6 @@ def update_file(ftp_uri, soruce_name, target_folder):
     if does_resource_exist(dest_file_timestamp, modification_date):
         print("already have this file")
         return
-    with open(dest_file, 'wb') as handle:
-        ftp.retrbinary('RETR %s' % path_split[-1], handle.write)
     with open(dest_file_timestamp, 'w') as handle:
         handle.write(modification_date)
 
@@ -49,7 +47,7 @@ def get_modification_date(ftp, o) -> str:
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser("download ftp file if not present locally")
+    parser = ArgumentParser("download last modification timestamp of file")
     parser.add_argument('--source',
                         type=str,
                         required=True,
@@ -65,4 +63,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     print(args.name)
-    update_file(ftp_uri=args.source, soruce_name=args.name, target_folder=args.target)
+    update_ftp_file(ftp_uri=args.source, soruce_name=args.name, target_folder=args.target)

@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  schedule:
+    - cron:  '0 * * * *'
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: github-actions-x/commit@v2.4.1
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+    - name: get last modified arin.db
+      run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.arin.net/pub/rr/arin.db.gz" --name "arin.db.gz" --target dist
+    - name: get last modified larnic.db
+      run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-extended-latest" --name "larnic.db" --target dist
+    - name: get last modified apnic-v6.gz
+      run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.apnic.net/pub/apnic/whois/apnic.db.inet6num.gz" --name "apnic-v6.gz" --target dist
+    - name: get last modified apnic-v4.gz
+      run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.apnic.net/pub/apnic/whois/apnic.db.inetnum.gz" --name "apnic-v4.gz" --target dist
+    - name: get last modified afrinic.gz
+      run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.afrinic.net/pub/dbase/afrinic.db.gz" --name "afrinic.gz" --target dist
+    - name: get last modified ripe-v4.gz
+      run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inetnum.gz" --name "ripe-v4.gz" --target dist
+    - name: get last modified ripe-v6.gz
+      run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inet6num.gz" --name "ripe-v6.gz" --target dist
+    - name: push
+      uses: github-actions-x/commit@v2.4.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        push-branch: 'master'
+        commit-message: '👷‍ publish updated ncc files'
+        files: dist
+        name: Get last modification date action
+        email: jaecktec@users.noreply.github.com

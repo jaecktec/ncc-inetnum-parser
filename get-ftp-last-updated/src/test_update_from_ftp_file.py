@@ -7,7 +7,7 @@ from time import mktime
 from unittest import TestCase, main
 from uuid import uuid4
 
-from . import update_ftp_file
+from update_from_ftp_file import update_ftp_file
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
@@ -41,7 +41,7 @@ class FuncThread(threading.Thread):
         self._target_asdf(*self._args_asdf)
 
 
-class TestLambdaHandler(TestCase):
+class TestUpdateTimestampFromFtpFile(TestCase):
 
     def __init__(self, methodName='runTest'):
         super().__init__(methodName)
@@ -75,32 +75,11 @@ class TestLambdaHandler(TestCase):
         target_folder = str(tempfile.gettempdir()) + "/" + str(uuid4())
         os.mkdir(target_folder)
         self.cleanup_folders.append(target_folder)
-        update_ftp_file.update_file(
+        update_ftp_file(
             ftp_uri="ftp://localhost:1026/some.db",
             soruce_name="some.db",
             target_folder=target_folder)
 
-        assert os.path.exists(target_folder + "/some.db")
-        assert md5(target_folder + "/some.db") == "cec86c49621276b57de7ca1aecf1c84d"
-        assert os.path.exists(target_folder + "/some.db.last_mod.txt")
-        assert file_content_to_string(target_folder + "/some.db.last_mod.txt") == "2020-01-01-00-00-00"
-
-    def test_not_download_existing_file(self):
-        target_folder = str(tempfile.gettempdir()) + "/" + str(uuid4())
-        os.mkdir(target_folder)
-        self.cleanup_folders.append(target_folder)
-        with open(target_folder + "/some.db", 'w') as handle:
-            handle.write("I am content")
-        with open(target_folder + "/some.db.last_mod.txt", 'w') as handle:
-            handle.write("2020-01-01-00-00-00")
-        update_ftp_file.update_file(
-            ftp_uri="ftp://localhost:1026/some.db",
-            soruce_name="some.db",
-            target_folder=target_folder)
-
-        assert len(self.downloaded_files) < 1
-        assert os.path.exists(target_folder + "/some.db")
-        assert file_content_to_string(target_folder + "/some.db") == "I am content"
         assert os.path.exists(target_folder + "/some.db.last_mod.txt")
         assert file_content_to_string(target_folder + "/some.db.last_mod.txt") == "2020-01-01-00-00-00"
 
