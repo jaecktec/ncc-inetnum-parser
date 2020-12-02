@@ -1,4 +1,4 @@
-name: CI
+name: get last modification date
 
 on:
   schedule:
