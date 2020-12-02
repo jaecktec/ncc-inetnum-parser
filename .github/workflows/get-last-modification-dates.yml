@@ -12,11 +12,11 @@ jobs:
   download:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions-x/commit@v2
-    - uses: actions/checkout@v2
     - uses: actions/setup-python@v1
       with:
         python-version: '3.7'
+    - name: checkout
+      uses: actions/checkout@v2
     - name: get last modified arin.db
       run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.arin.net/pub/rr/arin.db.gz" --name "arin.db.gz" --target dist
     - name: get last modified larnic.db
@@ -32,7 +32,7 @@ jobs:
     - name: get last modified ripe-v6.gz
       run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.ripe.net/ripe/dbase/split/ripe.db.inet6num.gz" --name "ripe-v6.gz" --target dist
     - name: push
-      uses: github-actions-x/commit@v2.4.1
+      uses: actions-x/commit@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: 'master'
