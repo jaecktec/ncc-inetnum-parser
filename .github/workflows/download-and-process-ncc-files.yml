@@ -1,0 +1,33 @@
+name: download and process files
+
+on:
+  workflow_dispatch:
+    inputs:  
+      tags:
+        description: 'Test scenario tags'  
+  push:
+    branches:
+      - master
+
+jobs:
+  download_timestamps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: download ncc files
+      run: ./download.sh
+    - name: process files
+      run: ./parse.sh
+    - name: push
+      uses: actions-x/commit@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: 'master'
+        message: '👷‍ publish updated ncc timestamps'
+        files: pub
+        name: Get last modification date action
+        email: jaecktec@users.noreply.github.com

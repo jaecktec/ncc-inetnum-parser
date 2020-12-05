@@ -134,13 +134,13 @@ def collapse_network(blocks_by_country, country_code, sub_networks):
 if __name__ == '__main__':
     timer = Timer()
     SOURCES = [
-        "apnic-v4.gz",
-        "apnic-v6.gz",
-        "afrinic.gz",
-        "arin.db",
-        "larnic.db",
-        "ripe-v4.gz",
-        "ripe-v6.gz",
+        "downloads/apnic-v4.gz",
+        "downloads/apnic-v6.gz",
+        "downloads/afrinic.gz",
+        "downloads/arin.db.gz",
+        "downloads/larnic.db",
+        "downloads/ripe-v4.gz",
+        "downloads/ripe-v6.gz",
     ]
     ipv4_write_queue = Queue()
     ipv6_write_queue = Queue()
@@ -175,7 +175,7 @@ if __name__ == '__main__':
         for source in SOURCES:
             executor.submit(
                 parse_file,
-                "/Users/constantin/Documents/workspace/ncc-inetnum-parser/dist/" + source,
+                source,
                 ipv4_write_queue,
                 ipv6_write_queue
             )
@@ -184,15 +184,17 @@ if __name__ == '__main__':
     collapse_networks(ipv6_blocks_by_country)
 
     for country_code, ipv4_sub_networks in ipv4_blocks_by_country.items():
+        if len(ipv4_sub_networks) < 1: continue
         with open(
-                "/Users/constantin/Documents/workspace/ncc-inetnum-parser/parsed/v4-{}.txt".format(country_code),
+                "./pub/v4/{}.txt".format(country_code),
                 'w') as handle:
             for network in ipv4_sub_networks:
                 handle.write("{}\n".format(str(network)))
 
     for country_code, ipv6_sub_networks in ipv6_blocks_by_country.items():
+        if len(ipv6_sub_networks) < 1: continue
         with open(
-                "/Users/constantin/Documents/workspace/ncc-inetnum-parser/parsed/v6-{}.txt".format(country_code),
+                "./pub/v6/{}.txt".format(country_code),
                 'w') as handle:
             for network in ipv6_sub_networks:
                 handle.write("{}\n".format(str(network)))
