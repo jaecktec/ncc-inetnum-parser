@@ -34,7 +34,7 @@ jobs:
     - name: push
       uses: actions-x/commit@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GIT_TOKEN }}
         branch: 'master'
         message: '👷‍ publish updated ncc timestamps'
         files: dist
