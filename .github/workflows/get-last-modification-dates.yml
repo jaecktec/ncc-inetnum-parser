@@ -16,7 +16,7 @@ jobs:
       with:
         python-version: '3.7'
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
     - name: get last modified arin.db
       run: python ./get-ftp-last-updated/src/update_from_ftp_file.py --source "ftp://ftp.arin.net/pub/rr/arin.db.gz" --name "arin.db.gz" --target dist
     - name: get last modified larnic.db
