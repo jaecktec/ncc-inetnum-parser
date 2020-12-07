@@ -35,6 +35,7 @@ jobs:
       uses: actions-x/commit@v2
       with:
         token: ${{ secrets.GIT_TOKEN }}
+        repository: https://github.com/jaecktec/ncc-inetnum-parser  
         branch: 'master'
         message: '👷‍ publish updated ncc timestamps'
         files: dist
