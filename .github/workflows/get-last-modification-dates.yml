@@ -37,7 +37,7 @@ jobs:
         token: ${{ secrets.GIT_TOKEN }}
         repository: https://github.com/jaecktec/ncc-inetnum-parser  
         branch: 'master'
-        message: '👷‍ publish updated ncc timestamps'
+        message: '🤖 publish updated ncc timestamps'
         files: dist
         name: Get last modification date action
         email: jaecktec@users.noreply.github.com
