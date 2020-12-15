@@ -40,4 +40,3 @@ jobs:
         message: '🤖 publish updated ncc timestamps'
         files: dist
         name: Get last modification date action
-        email: jaecktec@users.noreply.github.com
