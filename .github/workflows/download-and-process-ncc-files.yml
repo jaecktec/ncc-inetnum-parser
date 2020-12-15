@@ -29,5 +29,4 @@ jobs:
         branch: 'master'
         message: '🤖 update ip blocks'
         files: pub
-        name: Get last modification date action
-        email: jaecktec@users.noreply.github.com
+        name: 🤖
