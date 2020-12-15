@@ -39,4 +39,4 @@ jobs:
         branch: 'master'
         message: '🤖 publish updated ncc timestamps'
         files: dist
-        name: Get last modification date action
+        name: 🤖
