@@ -2,8 +2,8 @@
 
 This solution helps to guess the Country based on the IP Address.
 There are many other even more accurate databases on the market, however since they are shipped under some difficult licenses
-so it is sometimes easier to parse them yourself.
-In case you want to actively use this repository, either fork it or leve an issue so I know.
+so it is sometimes easier to parse them yourself.  
+**In case you want to actively use this repository, either fork it or leve an issue so I know.**
 
 This service downloads the inetnum files from all avalable NCCs, extracts the IP addresses sortet by country and optimises it.
 The Github Action keeps the list up to date. 
